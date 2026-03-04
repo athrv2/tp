@@ -336,6 +336,27 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3b1. System shows an error message regarding the format.
     * Use case resumes at step 3.
 
+**Use case: Search for Resident During Emergency**
+
+**MSS**
+
+1. User requests to find a resident using a partial name keyword.
+2. System shows a filtered list of matching residents with their indices.
+3. User identifies the correct resident and room number from the results.
+4. User requests to update the resident's phone number to the latest provided.
+5. System updates the record and confirms the change.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. No residents match the keyword.
+    * 1a1. System shows "No residents found matching [keyword]."
+    * Use case ends.
+* 1b. The search keyword is too broad (e.g., >200 matches).
+    * 1b1. User refines search.
+    * Use case resumes at step 1.
+
 
 ### Non-Functional Requirements
 
