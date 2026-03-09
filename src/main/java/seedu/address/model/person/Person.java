@@ -24,18 +24,20 @@ public class Person {
 
     // Data fields
     private final Room room;
+    private final Remark remark;
     private final Set<Tag> tags = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Room room, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Room room, Remark remark, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, room, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.room = room;
         this.tags.addAll(tags);
+        this.remark = remark;
     }
 
     public Name getName() {
@@ -52,6 +54,10 @@ public class Person {
 
     public Room getRoom() {
         return room;
+    }
+
+    public Remark getRemark() {
+        return remark;
     }
 
     /**
