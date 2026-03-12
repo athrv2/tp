@@ -4,6 +4,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
+import java.util.Objects;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
@@ -76,7 +77,7 @@ public class RemarkCommand extends Command {
         return String.format(message, Messages.format(personToEdit));
     }
 
-    `@Override`
+    @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
@@ -92,7 +93,7 @@ public class RemarkCommand extends Command {
                 && remark.equals(e.remark);
     }
 
-    `@Override`
+    @Override
     public int hashCode() {
         return Objects.hash(index, remark);
     }
