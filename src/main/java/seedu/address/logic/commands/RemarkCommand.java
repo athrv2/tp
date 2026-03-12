@@ -76,7 +76,7 @@ public class RemarkCommand extends Command {
         return String.format(message, Messages.format(personToEdit));
     }
 
-    @Override
+    `@Override`
     public boolean equals(Object other) {
         if (other == this) {
             return true;
@@ -90,5 +90,10 @@ public class RemarkCommand extends Command {
         RemarkCommand e = (RemarkCommand) other;
         return index.equals(e.index)
                 && remark.equals(e.remark);
+    }
+
+    `@Override`
+    public int hashCode() {
+        return Objects.hash(index, remark);
     }
 }
