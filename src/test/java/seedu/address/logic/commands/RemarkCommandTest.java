@@ -24,7 +24,7 @@ import seedu.address.model.person.Remark;
 import seedu.address.testutil.PersonBuilder;
 
 /**
- * Contains integration tests (interaction with the Model) and unit tests for EditCommand.
+ * Contains integration tests (interaction with the Model) and unit tests for RemarkCommand.
  */
 public class RemarkCommandTest {
     private static final String REMARK_STUB = "Some remark";
