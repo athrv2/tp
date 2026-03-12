@@ -34,7 +34,8 @@ class JsonAdaptedPerson {
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
      */
     @JsonCreator
-    public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
+    public JsonAdaptedPerson(
+            @JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("room") String room,
             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
         this.name = name;
@@ -64,7 +65,7 @@ class JsonAdaptedPerson {
      * {@code Person} object.
      *
      * @throws IllegalValueException if there were any data constraints violated in
-     *                               the adapted person.
+     *         the adapted person.
      */
     public Person toModelType() throws IllegalValueException {
         final List<Tag> personTags = new ArrayList<>();
