@@ -16,6 +16,8 @@ public class ListCommandParserTest {
     public void parse_validArgs_returnsListCommand() {
         assertParseSuccess(parser, "", new ListCommand());
         assertParseSuccess(parser, "   ", new ListCommand());
+        assertParseSuccess(parser, " s/name", new ListCommand("name", null)); // Comparator is ignored in equals
+        assertParseSuccess(parser, " s/room", new ListCommand("room", null));
     }
 
     @Test
@@ -23,5 +25,7 @@ public class ListCommandParserTest {
         assertParseFailure(parser, " 3", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         assertParseFailure(parser, " random text", String
                 .format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " s/", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " s/invalid", "Invalid sort field! Supported fields: name, room");
     }
 }
