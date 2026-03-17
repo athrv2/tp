@@ -41,17 +41,21 @@ public class ListCommandTest {
 
     @Test
     public void execute_listSortedByName_success() {
-        ListCommand listCommand = new ListCommand("name", (p1, p2) -> p1.getName().fullName.compareToIgnoreCase(p2.getName().fullName));
+        ListCommand listCommand = new ListCommand("name", (p1, p2) -> p1.getName().fullName
+                .compareToIgnoreCase(p2.getName().fullName));
         String expectedMessage = String.format(ListCommand.MESSAGE_SUCCESS_SORTED, "name");
-        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS, (p1, p2) -> p1.getName().fullName.compareToIgnoreCase(p2.getName().fullName));
+        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS, (p1, p2) -> p1.getName()
+                .fullName.compareToIgnoreCase(p2.getName().fullName));
         assertCommandSuccess(listCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_listSortedByRoom_success() {
-        ListCommand listCommand = new ListCommand("room", (p1, p2) -> p1.getRoom().compareTo(p2.getRoom()));
+        ListCommand listCommand = new ListCommand("room", (p1, p2) -> p1.getRoom()
+                .compareTo(p2.getRoom()));
         String expectedMessage = String.format(ListCommand.MESSAGE_SUCCESS_SORTED, "room");
-        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS, (p1, p2) -> p1.getRoom().compareTo(p2.getRoom()));
+        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS, (p1, p2) -> p1.getRoom()
+                .compareTo(p2.getRoom()));
         assertCommandSuccess(listCommand, model, expectedMessage, expectedModel);
     }
 
@@ -71,11 +75,9 @@ public class ListCommandTest {
 
         // null -> returns false
         assertFalse(listFirstCommand.equals(null));
-
         // different sort field -> returns false
         assertFalse(listFirstCommand.equals(new ListCommand("name", null)));
         assertFalse(new ListCommand("name", null).equals(new ListCommand("room", null)));
-        
         // same sort field -> returns true
         assertTrue(new ListCommand("name", null).equals(new ListCommand("name", null)));
     }

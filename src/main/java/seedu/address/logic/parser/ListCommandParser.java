@@ -44,7 +44,8 @@ public class ListCommandParser implements Parser<ListCommand> {
 
         switch (field.toLowerCase()) {
         case "name":
-            return new ListCommand("name", (p1, p2) -> p1.getName().fullName.compareToIgnoreCase(p2.getName().fullName));
+            return new ListCommand("name", (p1, p2) -> p1.getName().fullName
+                    .compareToIgnoreCase(p2.getName().fullName));
         case "room":
             return new ListCommand("room", (p1, p2) -> p1.getRoom().compareTo(p2.getRoom()));
         case "phone":

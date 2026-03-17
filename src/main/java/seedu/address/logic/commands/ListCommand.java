@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.Comparator;
+
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
@@ -25,11 +26,20 @@ public class ListCommand extends Command {
     private final String field;
     private final Comparator<Person> comparator;
 
+    /**
+     * Constructs a {@code ListCommand} that lists all residents without sorting.
+     */
     public ListCommand() {
         this.field = null;
         this.comparator = null;
     }
 
+    /**
+     * Constructs a {@code ListCommand} that lists all residents sorted by the given field.
+     *
+     * @param field The field name being sorted.
+     * @param comparator The comparator used for sorting.
+     */
     public ListCommand(String field, Comparator<Person> comparator) {
         this.field = field;
         this.comparator = comparator;
@@ -60,7 +70,6 @@ public class ListCommand extends Command {
         ListCommand otherListCommand = (ListCommand) other;
         boolean fieldEquals = (field == null && otherListCommand.field == null)
                 || (field != null && field.equals(otherListCommand.field));
-        
         return fieldEquals;
     }
 }
