@@ -40,4 +40,12 @@ public class RemarkCommandParserTest {
         // no index
         assertParseFailure(parser, RemarkCommand.COMMAND_WORD + " " + NON_EMPTY_REMARK, expectedMessage);
     }
+
+    @Test
+    public void parse_missingRemarkPrefix_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE);
+
+        // missing remark prefix (equivalent to user typing "remark 1" without r/)
+        assertParseFailure(parser, INDEX_FIRST_PERSON.getOneBased() + "", expectedMessage);
+    }
 }
