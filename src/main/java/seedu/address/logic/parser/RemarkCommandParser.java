@@ -28,6 +28,8 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
             throw new ParseException(invalidCommandFormatMessage, pe);
         }
 
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_REMARK);
+
         // When the remark command is used, the user must provide a r/ arg
         String remarkText = argMultimap.getValue(PREFIX_REMARK)
                 .orElseThrow(() -> new ParseException(invalidCommandFormatMessage));
