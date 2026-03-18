@@ -68,6 +68,7 @@ public class PersonCard extends UiPart<Region> {
         // Hide remark label if empty
         boolean hasRemark = !remarkText.isBlank();
         remark.setVisible(hasRemark);
+        // Do not reserve layout space for label
         remark.setManaged(hasRemark);
 
         person.getTags().stream()
