@@ -271,13 +271,14 @@ Felix is a Year 3 Soc student and RA at Acacia College. Approachable and proacti
 
 ### User stories
 
-The primary user of RACE is a Resident Assistant (RA) who needs to manage resident information efficiently during onboarding and throughout the semester. As a beginner RA, the user should be able to add a new resident record with a name and room number so that residents can be registered quickly during onboarding. The user should also be able to add a resident using a single command with multiple fields, allowing onboarding to be performed rapidly even when many residents need to be entered at once. In addition, the user should be able to view a list of all registered residents so that they can easily see everyone under their care.
-
-To support quick retrieval of information, the user should be able to search for residents using partial information, allowing them to locate a resident even when they do not remember the exact details. The user should also be able to sort residents alphabetically or sort residents by room number, making it easier to browse through the resident list and perform block checks.
-
-To ensure records remain accurate over time, the RA should be able to update resident details whenever information changes. The user should also be able to remove resident records that are no longer needed, ensuring the system remains organised and uncluttered.
-
-Finally, the system should support basic usability and flexibility. A new RA should be able to understand what the system is meant to help them do, such as through clear guidance or documentation, so that they can quickly learn how the system supports their role. Additionally, the RA should be able to add a resident even if some optional fields are missing, ensuring that incomplete information does not prevent onboarding during busy periods.               | 
+* As a new RA, I can add a resident with the required details, so that I can register residents quickly during onboarding.
+* As an RA handling a busy intake, I can include optional fields in the same `add` command, so that incomplete information does not block onboarding.
+* As an RA, I can list all residents, so that I can review the current roster at a glance.
+* As a forgetful RA, I can find residents by name keyword or exact room, so that I can retrieve a record even when I only remember partial information.
+* As an RA, I can edit a resident's core details, so that the address book stays accurate when contact information changes.
+* As an RA, I can add or clear a private remark for a resident, so that I can keep follow-up notes without changing the resident's main details.
+* As an RA, I can delete resident records that are no longer needed, so that the address book remains organised.
+* As a new RA, I can refer to help and documentation, so that I can learn the command format quickly.
 
 ### Use cases
 
