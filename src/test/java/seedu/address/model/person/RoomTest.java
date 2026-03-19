@@ -28,13 +28,14 @@ public class RoomTest {
         assertFalse(Room.isValidRoom("")); // empty string
         assertFalse(Room.isValidRoom(" ")); // spaces only
         assertFalse(Room.isValidRoom("#14-203-d")); // letter must be uppercase
-        assertFalse(Room.isValidRoom("#123-203-D")); // block must be 1-2 digits
-        assertFalse(Room.isValidRoom("#14-20-D")); // room must be 3 digits
+        assertFalse(Room.isValidRoom("#123-203-D")); // floor must be 1-2 digits
         assertFalse(Room.isValidRoom("14-203-D")); // missing leading '#'
 
         // valid rooms
         assertTrue(Room.isValidRoom("#14-203-D"));
+        assertTrue(Room.isValidRoom("#14-20-D")); // unit can be 2 or 3 digits
         assertTrue(Room.isValidRoom("#1-000-A"));
+        assertTrue(Room.isValidRoom("#14-20")); // letter is optional
         assertTrue(Room.isValidRoom("#99-999-Z"));
     }
 
@@ -56,5 +57,38 @@ public class RoomTest {
 
         // different values -> returns false
         assertFalse(room.equals(new Room("#3-118-A")));
+    }
+
+    @Test
+    public void hashCode_sameValues_sameHashCode() {
+        Room room1 = new Room("#14-203-D");
+        Room room2 = new Room("#14-203-D");
+        assertTrue(room1.hashCode() == room2.hashCode());
+    }
+
+    @Test
+    public void compareTo() {
+        Room roomLower = new Room("#01-101-A");
+        Room roomHigherBlock = new Room("#02-101-A");
+        Room roomHigherUnit = new Room("#01-102-A");
+        Room roomHigherLetter = new Room("#01-101-B");
+
+        // same values -> returns 0
+        assertTrue(roomLower.compareTo(new Room("#01-101-A")) == 0);
+
+        // higher block -> returns negative
+        assertTrue(roomLower.compareTo(roomHigherBlock) < 0);
+        // lower block -> returns positive
+        assertTrue(roomHigherBlock.compareTo(roomLower) > 0);
+
+        // higher unit -> returns negative
+        assertTrue(roomLower.compareTo(roomHigherUnit) < 0);
+        // lower unit -> returns positive
+        assertTrue(roomHigherUnit.compareTo(roomLower) > 0);
+
+        // higher letter -> returns negative
+        assertTrue(roomLower.compareTo(roomHigherLetter) < 0);
+        // lower letter -> returns positive
+        assertTrue(roomHigherLetter.compareTo(roomLower) > 0);
     }
 }
