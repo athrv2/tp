@@ -461,6 +461,7 @@ Felix is a Year 3 Soc student and RA at Acacia College. Approachable and proacti
 * **Private contact detail**: A contact detail that is not meant to be shared with others
 * **Resident**: A person living in the residential college whose information is stored and managed by the system. Each resident record may include fields such as name, room number, and other optional details.
 * **Resident Assistant (RA)**: The primary user of the application who manages resident information, performs onboarding, and maintains records throughout the semester for a batch of residents living in the residential college.
+* **Remark**: A free-form note stored with a resident record for short contextual information such as follow-ups or special reminders.
 * **User's Preferences (UserPref)**: Settings related to the application environment (e.g., window size or file paths) that are saved locally and loaded when the application starts.
 * **JSON**: JSON (JavaScript Object Notation) is the data format used by the application to store resident information and user preferences on disk.
 * **Index**: The number used by commands (e.g., `delete 1`) to identify a resident from the currently displayed list.
