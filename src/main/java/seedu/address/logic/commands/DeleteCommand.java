@@ -34,6 +34,7 @@ public class DeleteCommand extends Command {
 
     public DeleteCommand(List<Index> targetIndices) {
         this.targetIndices = List.copyOf(targetIndices);
+        assert !this.targetIndices.isEmpty() : "DeleteCommand requires at least one index";
     }
 
     @Override
