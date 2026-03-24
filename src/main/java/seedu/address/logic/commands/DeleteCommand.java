@@ -32,6 +32,9 @@ public class DeleteCommand extends Command {
 
     private final List<Index> targetIndices;
 
+    /**
+     * Creates a DeleteCommand to delete one or more persons at the given indices.
+     */
     public DeleteCommand(List<Index> targetIndices) {
         this.targetIndices = List.copyOf(targetIndices);
         assert !this.targetIndices.isEmpty() : "DeleteCommand requires at least one index";
