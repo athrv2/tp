@@ -46,8 +46,6 @@ public class Tag {
 
     @Override
     public boolean equals(Object other) {
-        assert other != null : "Comparing Tag with null";
-
         if (other == this) {
             return true;
         }
