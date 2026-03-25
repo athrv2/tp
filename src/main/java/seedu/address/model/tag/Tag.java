@@ -3,11 +3,15 @@ package seedu.address.model.tag;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.logging.Logger;
+
 /**
  * Represents a Tag in the address book.
  * Guarantees: immutable; name is valid as declared in {@link #isValidTagName(String)}
  */
 public class Tag {
+
+    private static final Logger logger = Logger.getLogger(Tag.class.getName());
 
     public static final String MESSAGE_CONSTRAINTS =
         "Tags must be one of the following: Vegetarian, Vegan, Halal, Allergies";
@@ -23,6 +27,9 @@ public class Tag {
         requireNonNull(tagName);
         checkArgument(isValidTagName(tagName), MESSAGE_CONSTRAINTS);
         this.tagType = TagType.fromString(tagName);
+        logger.fine("Created tag: [" + tagType.getDisplayName() + "]");
+
+        assert tagType != null : "TagType should never be null after parsing";
     }
 
     /**
@@ -39,6 +46,8 @@ public class Tag {
 
     @Override
     public boolean equals(Object other) {
+        assert other != null : "Comparing Tag with null";
+
         if (other == this) {
             return true;
         }
