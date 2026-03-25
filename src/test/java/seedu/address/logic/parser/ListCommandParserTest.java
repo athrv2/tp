@@ -22,10 +22,11 @@ public class ListCommandParserTest {
         assertParseSuccess(parser, "", new ListCommand());
         assertParseSuccess(parser, "   ", new ListCommand());
         // equals() only compares field name, so a dummy comparator suffices
-        assertParseSuccess(parser, " s/name", new ListCommand("name", DUMMY_COMPARATOR));
-        assertParseSuccess(parser, " s/room", new ListCommand("room", DUMMY_COMPARATOR));
-        assertParseSuccess(parser, " s/phone", new ListCommand("phone", DUMMY_COMPARATOR));
-        assertParseSuccess(parser, " s/email", new ListCommand("email", DUMMY_COMPARATOR));
+        assertParseSuccess(parser, " -sort n/", new ListCommand("name", DUMMY_COMPARATOR));
+        assertParseSuccess(parser, " -sort r/", new ListCommand("room", DUMMY_COMPARATOR));
+        assertParseSuccess(parser, " -sort p/", new ListCommand("phone", DUMMY_COMPARATOR));
+        assertParseSuccess(parser, " -sort e/", new ListCommand("email", DUMMY_COMPARATOR));
+        assertParseSuccess(parser, " -SoRt r/", new ListCommand("room", DUMMY_COMPARATOR));
     }
 
     @Test
@@ -33,9 +34,10 @@ public class ListCommandParserTest {
         assertParseFailure(parser, " 3", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         assertParseFailure(parser, " random text", String
                 .format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, " s/", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, " some preamble s/name",
+        assertParseFailure(parser, " -sort", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " some preamble -sort n/",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, " s/invalid", "Invalid sort field! Supported fields: name, room, phone, email");
+        assertParseFailure(parser, " -sort invalid/",
+                "Invalid sort field! Supported field prefixes: n/, r/, p/, e/");
     }
 }
