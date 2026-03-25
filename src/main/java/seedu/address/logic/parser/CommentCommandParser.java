@@ -10,6 +10,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Comment;
 
 // Solution below adapted from https://se-education.org/
+
 /**
  * Parses input arguments and creates a new CommentCommand object
  */
@@ -19,7 +20,8 @@ public class CommentCommandParser implements Parser<CommentCommand> {
         requireNonNull(userInput);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(userInput, PREFIX_COMMENT);
 
-        String invalidCommandFormatMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, CommentCommand.MESSAGE_USAGE);
+        String invalidCommandFormatMessage =
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, CommentCommand.MESSAGE_USAGE);
 
         Index index;
         try {
