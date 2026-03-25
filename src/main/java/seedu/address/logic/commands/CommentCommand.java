@@ -77,10 +77,10 @@ public class CommentCommand extends Command {
         boolean oldCommentEmpty = personBeforeEdit.getComment().value.isEmpty();
         boolean newCommentEmpty = editedPerson.getComment().value.isEmpty();
         String message;
-        if (oldCommentEmpty && !newCommentEmpty) {
-            message = MESSAGE_ADD_COMMENT_SUCCESS;
-        } else if (!oldCommentEmpty && newCommentEmpty) {
+        if (newCommentEmpty) {
             message = MESSAGE_DELETE_COMMENT_SUCCESS;
+        } else if (oldCommentEmpty) {
+            message = MESSAGE_ADD_COMMENT_SUCCESS;
         } else {
             message = MESSAGE_UPDATE_COMMENT_SUCCESS;
         }
