@@ -32,6 +32,7 @@ public class CommentCommand extends Command {
 
     public static final String MESSAGE_ADD_COMMENT_SUCCESS = "Added comment to Person: %1$s";
     public static final String MESSAGE_DELETE_COMMENT_SUCCESS = "Removed comment from Person: %1$s";
+    public static final String MESSAGE_UPDATE_COMMENT_SUCCESS = "Updated comment for Person: %1$s";
 
     public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Comment: %2$s";
 
@@ -65,17 +66,25 @@ public class CommentCommand extends Command {
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        return new CommandResult(generateSuccessMessage(editedPerson));
+        return new CommandResult(generateSuccessMessage(personToEdit, editedPerson));
     }
 
     /**
-     * Generates a command execution success message based on whether
-     * the comment is added to or removed from
-     * {@code personToEdit}.
+     * Generates a command execution success message based on the previous
+     * and new comment on {@code personBeforeEdit}.
      */
-    private String generateSuccessMessage(Person personToEdit) {
-        String message = !comment.value.isEmpty() ? MESSAGE_ADD_COMMENT_SUCCESS : MESSAGE_DELETE_COMMENT_SUCCESS;
-        return String.format(message, Messages.format(personToEdit));
+    private String generateSuccessMessage(Person personBeforeEdit, Person editedPerson) {
+        boolean oldCommentEmpty = personBeforeEdit.getComment().value.isEmpty();
+        boolean newCommentEmpty = editedPerson.getComment().value.isEmpty();
+        String message;
+        if (oldCommentEmpty && !newCommentEmpty) {
+            message = MESSAGE_ADD_COMMENT_SUCCESS;
+        } else if (!oldCommentEmpty && newCommentEmpty) {
+            message = MESSAGE_DELETE_COMMENT_SUCCESS;
+        } else {
+            message = MESSAGE_UPDATE_COMMENT_SUCCESS;
+        }
+        return String.format(message, Messages.format(editedPerson));
     }
 
     @Override
