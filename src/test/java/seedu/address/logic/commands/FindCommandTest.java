@@ -91,8 +91,8 @@ public class FindCommandTest {
 
     @Test
     public void execute_afterSort_resetsSortOrder() {
-        Comparator<seedu.address.model.person.Person> roomComparator =
-                (p1, p2) -> p1.getRoom().compareTo(p2.getRoom());
+        Comparator<seedu.address.model.person.Person> roomComparator = (p1, p2) ->
+                p1.getRoom().compareTo(p2.getRoom());
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS, roomComparator);
 
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
