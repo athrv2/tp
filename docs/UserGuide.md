@@ -232,4 +232,4 @@ Action | Format, Examples
 **Find** | `find KEYWORD [MORE_KEYWORDS]` or `find ROOM`<br> e.g., `find James Jake`, `find #14-203-D`
 **List** | `list [s/FIELD]` <br> e.g., `list s/room`
 **Help** | `help`
-**Comment** | `comment INDEX c/COMMENT`<br> e.g., `comment 1 c/Prefers WhatsApp messages before visits`, `comment 3 c/`
+**Comment** | `comment INDEX c/[COMMENT]`<br> e.g., `comment 1 c/Prefers WhatsApp messages before visits`, `comment 3 c/`
