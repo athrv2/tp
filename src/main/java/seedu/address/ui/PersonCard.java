@@ -72,7 +72,7 @@ public class PersonCard extends UiPart<Region> {
         remark.setManaged(hasRemark);
 
         person.getTags().stream()
-                .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+                .sorted(Comparator.comparing(tag -> tag.tagType))
+                .forEach(tag -> tags.getChildren().add(new Label(tag.tagType.getDisplayName())));
     }
 }
