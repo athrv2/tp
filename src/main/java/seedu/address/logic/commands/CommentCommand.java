@@ -5,7 +5,9 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -19,6 +21,8 @@ import seedu.address.model.person.Person;
  * Changes the comment of an existing person in the address book.
  */
 public class CommentCommand extends Command {
+    private static final Logger logger = LogsCenter.getLogger(CommentCommand.class);
+
     public static final String COMMAND_WORD = "comment";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -59,6 +63,9 @@ public class CommentCommand extends Command {
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
+        logger.info("Editing comment for person: " + personToEdit.getName() + " | Old comment: "
+                + personToEdit.getComment().value + " | New comment: " + comment.value);
+
         Person editedPerson = new Person(
                 personToEdit.getName(), personToEdit.getPhone(), personToEdit.getEmail(),
                 personToEdit.getRoom(), comment, personToEdit.getTags());
@@ -66,6 +73,7 @@ public class CommentCommand extends Command {
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
+        logger.info("Comment updated successfully for: " + editedPerson.getName());
         return new CommandResult(generateSuccessMessage(personToEdit, editedPerson));
     }
 
