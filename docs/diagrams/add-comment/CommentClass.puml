@@ -20,6 +20,6 @@ Class Comment
 Class Index
 
 CommentCommand -up-|> Command
-CommentCommand *-- "1" Comment : has >
+CommentCommand *-- "1" Comment
 CommentCommand -down-> "1" Index : references >
 @enduml
