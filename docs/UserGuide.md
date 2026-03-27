@@ -2,12 +2,34 @@
 layout: page
 title: User Guide
 ---
+# User Guide
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps. This will eventually be upgraded by our team!
+>  **RACE (Residential Assistant’s Contact Entries)** is a desktop application for managing resident information, optimized for use via a Command Line Interface (CLI) while still providing the benefits of a Graphical User Interface (GUI). It allows Residential Assistants to quickly store, update, and retrieve resident details in a secure, centralised system, replacing fragmented and inefficient workflows. Fast CLI commands enable efficient data entry and management, especially during high-intensity periods like onboarding.
+>
+> **Target Users:** Residential Assistants (RAs)  
+>
+> **Assumptions:** Users have basic computer literacy and are comfortable with typing commands, navigating lists, and interpreting simple system feedback. They can quickly pick up terminal-style interactions and prefer efficient, keyboard-driven workflows for repetitive tasks.
 
-* Table of Contents
-{:toc}
 
+## Table of Contents
+
+* Quick start
+* Features
+  * Viewing help : `help`
+  * Adding a resident : `add`
+  * Listing all residents : `list`
+  * Editing a resident : `edit`
+  * Adding a comment : `comment`
+  * Finding a resident : `find`
+  * Deleting a resident : `delete`
+  * Clearing all entries : `clear`
+  * Exiting the program : `exit`
+  * Saving the data
+  * Editing the data file
+  * Archiving data files 
+* FAQ
+* Known issues
+* Command summary
 --------------------------------------------------------------------------------------------------------------------
 
 ## Quick start
@@ -15,7 +37,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-T10-2/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
@@ -44,7 +66,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 <div markdown="block" class="alert alert-info">
 
-**:information_source: Notes about the command format:**<br>
+**Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
@@ -58,8 +80,11 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
-  e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+* For commands that accept multiple values in one parameter, use comma-separated input.<br>
+  e.g. `delete 1,3,5` deletes residents at indices 1, 3, and 5.
+
+* Leading and trailing spaces are ignored for command arguments.<br>
+  e.g. `delete  1, 3 ,5 ` is accepted as `delete 1,3,5`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
