@@ -1,5 +1,8 @@
 package seedu.address.model.tag;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * Enumeration of built-in tag types.
  */
@@ -8,6 +11,10 @@ public enum DefaultTagType {
     VEGAN("vegan"),
     HALAL("halal"),
     ALLERGIES("allergies");
+
+    private static final String MESSAGE_VALID_DEFAULT_TAGS = Arrays.stream(values())
+            .map(DefaultTagType::getDisplayName)
+            .collect(Collectors.joining(", "));
 
     private final String displayName;
 
@@ -32,7 +39,7 @@ public enum DefaultTagType {
             }
         }
         throw new IllegalArgumentException(
-                "Tags must be one of the following: vegetarian, vegan, halal, allergies");
+                "Tags must be one of the following: " + MESSAGE_VALID_DEFAULT_TAGS);
     }
 
     /**
