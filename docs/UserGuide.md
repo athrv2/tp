@@ -132,6 +132,7 @@ Format: `add n/NAME [p/PHONE] [e/EMAIL] r/ROOM [t/TAG]…​ [-newtag]`
 * Built-in tags are `vegetarian`, `vegan`, `halal`, and `allergies`.
 * All tags are case-sensitive. For example, `study-group` and `Study-Group` are treated as different tags.
 * Kebab-case is recommended for consistency, e.g. `study-group`.
+* **Spaces are not allowed in tags.** Use hyphens to separate words instead (e.g., `study-group` not `study group`).
 * To create a new custom tag while adding a resident, include `-newtag` in the same command.
 * If you include `-newtag` for a tag that already exists, RACE will still accept the command. No duplicate tag is created.
 
@@ -154,6 +155,7 @@ Tags help you label residents with quick categories or notes.
 * The four built-in tags are always available: `vegetarian`, `vegan`, `halal`, `allergies`.
 * Any other tag is treated as a custom tag.
 * Custom tags must already exist before you can reuse them.
+* **Spaces are not allowed in tags.** Use hyphens to separate words (e.g., `project-team` not `project team`).
 * If you want to introduce a brand-new custom tag, use `-newtag` together with `add` or `edit`.
 * If you use `-newtag` for an already existing tag, the command still succeeds normally.
 
@@ -504,6 +506,9 @@ _Details coming soon ..._
 
 **Q**: Are tags case-sensitive?<br>
 **A**: Yes. `study-group` and `Study-Group` are treated as different tags. For consistency, we recommend entering tags in kebab-case.
+
+**Q**: Can tags contain spaces?<br>
+**A**: No. Tags cannot contain spaces. Use hyphens to separate words instead (e.g., `study-group` instead of `study group`).
 
 **Q**: What happens if I use `-newtag` for a tag that already exists?<br>
 **A**: Nothing extra happens. The command still works normally, and RACE simply reuses the existing tag.
