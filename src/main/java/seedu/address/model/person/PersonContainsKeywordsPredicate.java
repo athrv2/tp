@@ -1,8 +1,8 @@
 package seedu.address.model.person;
 
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 
@@ -11,7 +11,12 @@ import seedu.address.commons.util.ToStringBuilder;
  */
 public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
-
+    /**
+     * Constructs a PersonContainsKeywordsPredicate with the given keywords.
+     *
+     * @param keywords the keywords to match against person attributes
+     * @throws NullPointerException if keywords is null
+     */
     public PersonContainsKeywordsPredicate(List<String> keywords) {
         Objects.requireNonNull(keywords, "Keywords cannot be null");
         this.keywords = keywords;
