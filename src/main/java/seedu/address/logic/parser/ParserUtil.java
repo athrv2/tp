@@ -129,12 +129,26 @@ public class ParserUtil {
 
     /**
      * Parses a flag prefix that must not have an associated value.
+     * If the flag is present but followed by a non-empty value, the error uses the generic invalid command format.
      */
     public static boolean parseBooleanFlag(ArgumentMultimap argMultimap, Prefix prefix, String usageMessage)
             throws ParseException {
+        requireNonNull(usageMessage);
+        return parseBooleanFlagWithTrailingValueMessage(argMultimap, prefix,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, usageMessage));
+    }
+
+    /**
+     * Parses a flag prefix that must not have an associated value.
+     *
+     * @param messageWhenFlagHasTrailingValue full message when {@code prefix} is present but followed by a non-empty
+     *        value
+     */
+    public static boolean parseBooleanFlagWithTrailingValueMessage(ArgumentMultimap argMultimap, Prefix prefix,
+            String messageWhenFlagHasTrailingValue) throws ParseException {
         requireNonNull(argMultimap);
         requireNonNull(prefix);
-        requireNonNull(usageMessage);
+        requireNonNull(messageWhenFlagHasTrailingValue);
 
         Optional<String> flagValue = argMultimap.getValue(prefix);
         if (flagValue.isEmpty()) {
@@ -142,7 +156,7 @@ public class ParserUtil {
         }
 
         if (!flagValue.get().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, usageMessage));
+            throw new ParseException(messageWhenFlagHasTrailingValue);
         }
 
         return true;

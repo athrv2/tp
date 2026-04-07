@@ -200,7 +200,7 @@ When sorting IS used:
 
 **Caution:**
 * Invalid command format → `Invalid command format!`
-* Invalid sort prefix (e.g., `list -sort x/`) → `Invalid sort field! Supported field prefixes: n/, r/, p/, e/`
+* Invalid sort prefix (e.g., `list -sort x/`) → `Invalid sort field! Supported field prefixes: n/, r/`
 
 </box>
 
