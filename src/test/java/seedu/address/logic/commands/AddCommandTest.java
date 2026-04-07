@@ -70,8 +70,8 @@ public class AddCommandTest {
                 .build();
         AddCommand addCommand = new AddCommand(duplicatePhone);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PHONE,
-                () -> addCommand.execute(new ModelStubWithPerson(existingPerson)));
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PHONE, () ->
+                addCommand.execute(new ModelStubWithPerson(existingPerson)));
     }
 
     @Test
@@ -88,8 +88,8 @@ public class AddCommandTest {
                 .build();
         AddCommand addCommand = new AddCommand(duplicateEmail);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_EMAIL,
-                () -> addCommand.execute(new ModelStubWithPerson(existingPerson)));
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_EMAIL, () ->
+                addCommand.execute(new ModelStubWithPerson(existingPerson)));
     }
 
     @Test
@@ -106,8 +106,8 @@ public class AddCommandTest {
                 .build();
         AddCommand addCommand = new AddCommand(duplicateRoom);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_ROOM,
-                () -> addCommand.execute(new ModelStubWithPerson(existingPerson)));
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_ROOM, () ->
+                addCommand.execute(new ModelStubWithPerson(existingPerson)));
     }
 
     @Test
