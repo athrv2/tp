@@ -53,6 +53,12 @@ public class AddCommand extends Command {
             + PREFIX_NEWTAG;
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
+    public static final String MESSAGE_MISSING_NAME =
+            "Missing required parameter: " + PREFIX_NAME + "NAME";
+    public static final String MESSAGE_MISSING_ROOM =
+            "Missing required parameter: " + PREFIX_ROOM + "ROOM";
+    public static final String MESSAGE_NEWTAG_FLAG_TAKES_NO_VALUE =
+            "The " + PREFIX_NEWTAG + " flag must not be followed by a value.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
     public static final String MESSAGE_UNKNOWN_TAGS = TagCommandUtil.MESSAGE_UNKNOWN_TAGS;
 
