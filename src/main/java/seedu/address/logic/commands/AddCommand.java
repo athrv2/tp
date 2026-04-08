@@ -62,7 +62,7 @@ public class AddCommand extends Command {
     public static final String MESSAGE_NEWTAG_FLAG_TAKES_NO_VALUE =
             "The " + PREFIX_NEWTAG + " flag must not be followed by a value.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
-    public static final String MESSAGE_DUPLICATE_NAME = "Name already exists in the address book. E.g., try using Alex Tan (Year 2) instead of Alex Tan.";
+    public static final String MESSAGE_DUPLICATE_NAME = "Name already exists in the address book. E.g. try using Alex Tan (Year 2) instead of Alex Tan.";
     public static final String MESSAGE_DUPLICATE_PHONE = "Phone number already exists in the address book.";
     public static final String MESSAGE_DUPLICATE_EMAIL = "Email already exists in the address book.";
     public static final String MESSAGE_DUPLICATE_ROOM = "Room number already exists in the address book.";
