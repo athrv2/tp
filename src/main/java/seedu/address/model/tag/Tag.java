@@ -9,10 +9,12 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Tag {
 
-    public static final String MESSAGE_CONSTRAINTS = "Tags names should be alphanumeric";
-    public static final String VALIDATION_REGEX = "\\p{Alnum}+";
+    public static final String MESSAGE_CONSTRAINTS =
+            "Tags should only contain letters, numbers, and hyphens, and it should not be blank. "
+                    + "Hyphens may be used to separate words (e.g., study-group). Spaces are not allowed.";
+    private static final String VALIDATION_REGEX = "[A-Za-z0-9][A-Za-z0-9-]*";
 
-    public final String tagName;
+    private final String tagName;
 
     /**
      * Constructs a {@code Tag}.
@@ -21,15 +23,37 @@ public class Tag {
      */
     public Tag(String tagName) {
         requireNonNull(tagName);
-        checkArgument(isValidTagName(tagName), MESSAGE_CONSTRAINTS);
-        this.tagName = tagName;
+        String trimmedTagName = tagName.trim();
+        checkArgument(isValidTagName(trimmedTagName), MESSAGE_CONSTRAINTS);
+
+        if (DefaultTagEnum.isDefaultTagName(trimmedTagName)) {
+            this.tagName = DefaultTagEnum.fromString(trimmedTagName).getDisplayName();
+        } else {
+            this.tagName = trimmedTagName;
+        }
     }
 
     /**
      * Returns true if a given string is a valid tag name.
      */
-    public static boolean isValidTagName(String test) {
-        return test.matches(VALIDATION_REGEX);
+    public static boolean isValidTagName(String test) throws NullPointerException {
+        requireNonNull(test);
+        String trimmedTagName = test.trim();
+        return !trimmedTagName.isEmpty() && trimmedTagName.matches(VALIDATION_REGEX);
+    }
+
+    /**
+     * Returns the display name of the tag.
+     */
+    public String getTagName() {
+        return tagName;
+    }
+
+    /**
+     * Returns true if this tag is one of the built-in default tags.
+     */
+    public boolean isBuiltInTag() {
+        return DefaultTagEnum.isDefaultTagName(tagName);
     }
 
     @Override

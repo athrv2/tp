@@ -1,5 +1,6 @@
 package seedu.address.model.tag;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,10 @@ public class TagTest {
     public void constructor_invalidTagName_throwsIllegalArgumentException() {
         String invalidTagName = "";
         assertThrows(IllegalArgumentException.class, () -> new Tag(invalidTagName));
+
+        // spaces not allowed
+        assertThrows(IllegalArgumentException.class, () -> new Tag("study group"));
+        assertThrows(IllegalArgumentException.class, () -> new Tag("halal food"));
     }
 
     @Test
@@ -23,4 +28,8 @@ public class TagTest {
         assertThrows(NullPointerException.class, () -> Tag.isValidTagName(null));
     }
 
+    @Test
+    public void equals_differentCaseCustomTags_notEqual() {
+        assertNotEquals(new Tag("study-group"), new Tag("Study-Group"));
+    }
 }

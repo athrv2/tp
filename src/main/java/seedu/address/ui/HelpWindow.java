@@ -15,7 +15,7 @@ import seedu.address.commons.core.LogsCenter;
  */
 public class HelpWindow extends UiPart<Stage> {
 
-    public static final String USERGUIDE_URL = "https://se-education.org/addressbook-level3/UserGuide.html";
+    public static final String USERGUIDE_URL = "https://ay2526s2-cs2103t-t10-2.github.io/tp/";
     public static final String HELP_MESSAGE = "Refer to the user guide: " + USERGUIDE_URL;
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
@@ -58,7 +58,7 @@ public class HelpWindow extends UiPart<Stage> {
      *         if this method is called on the primary stage.
      *         </li>
      *         <li>
-     *         if {@code dialogStage} is already showing.
+     *         if the root stage (returned by {@link #getRoot()}) is already showing.
      *         </li>
      *         </ul>
      */

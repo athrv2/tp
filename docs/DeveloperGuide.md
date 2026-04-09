@@ -1,15 +1,19 @@
 ---
-layout: page
-title: Developer Guide
+  layout: default.md
+  title: "Developer Guide"
+  pageNav: 3
 ---
-* Table of Contents
-{:toc}
+
+# AB-3 Developer Guide
+
+<!-- * Table of Contents -->
+<page-nav-print />
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Acknowledgements**
 
-* The `remark` feature implementation is adapted from the se-edu tutorial [Adding a Remark Command to AB3](https://se-education.org/guides/tutorials/ab3AddRemark.html).
+* The `comment` feature implementation is adapted from the se-edu tutorial [Adding optional fields to AB3](https://se-education.org/).
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -21,14 +25,9 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 ## **Design**
 
-<div markdown="span" class="alert alert-primary">
-
-:bulb: **Tip:** The `.puml` files used to create diagrams are in this document `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
-</div>
-
 ### Architecture
 
-<img src="images/ArchitectureDiagram.png" width="280" />
+<puml src="diagrams/ArchitectureDiagram.puml" width="280" />
 
 The ***Architecture Diagram*** given above explains the high-level design of the App.
 
@@ -53,7 +52,7 @@ The bulk of the app's work is done by the following four components:
 
 The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
 
-<img src="images/ArchitectureSequenceDiagram.png" width="574" />
+<puml src="diagrams/ArchitectureSequenceDiagram.puml" width="574" />
 
 Each of the four main components (also shown in the diagram above),
 
@@ -62,7 +61,7 @@ Each of the four main components (also shown in the diagram above),
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
-<img src="images/ComponentManagers.png" width="300" />
+<puml src="diagrams/ComponentManagers.puml" width="300" />
 
 The sections below give more details of each component.
 
@@ -70,7 +69,7 @@ The sections below give more details of each component.
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
-![Structure of the UI Component](images/UiClassDiagram.png)
+<puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
@@ -82,7 +81,7 @@ The `UI` component,
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
 * depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
-* renders a resident's remark in `PersonCard` only when the remark is non-empty, so empty remarks do not take up space in the list view.
+* renders a resident's comment in `PersonCard` only when the comment is non-empty, so empty comments do not take up space in the list view.
 
 ### Logic component
 
@@ -90,14 +89,16 @@ The `UI` component,
 
 Here's a (partial) class diagram of the `Logic` component:
 
-<img src="images/LogicClassDiagram.png" width="550"/>
+<puml src="diagrams/LogicClassDiagram.puml" width="550"/>
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
 
-![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
+<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
-</div>
+<box type="info" seamless>
+
+**Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+</box>
 
 How the `Logic` component works:
 
@@ -109,7 +110,7 @@ How the `Logic` component works:
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
-<img src="images/ParserClasses.png" width="600"/>
+<puml src="diagrams/ParserClasses.puml" width="600"/>
 
 How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
@@ -118,32 +119,37 @@ How the parsing works:
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
-<img src="images/ModelClassDiagram.png" width="450" />
+<puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object). Each `Person` stores immutable values for `Name`, `Phone`, `Email`, `Room`, `Remark`, and tags.
+* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object). Each `Person` stores immutable values for `Name`, `Phone`, `Email`, `Room`, `Comment`, and tags.
+* stores a `CustomTagRegistry` inside `AddressBook` to track user-created tags separately from each `Person`.
+* treats tag names as exact, case-sensitive values. There is no automatic tag normalization; kebab-case is a usage convention rather than a storage rule.
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+<box type="info" seamless>
 
-<img src="images/BetterModelClassDiagram.png" width="450" />
+**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
 
-</div>
+<puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
+
+</box>
 
 
 ### Storage component
 
 **API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
-<img src="images/StorageClassDiagram.png" width="550" />
+<puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
 The `Storage` component,
 * can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
-* persists each person's remark in the JSON data file and loads missing `remark` fields as empty remarks to preserve compatibility with older saved data.
+* persists each person's comment in the JSON data file and loads missing `comment` fields as empty comments to preserve compatibility with older saved data.
+* persists the custom tag registry separately as `customTags`, while also rebuilding missing custom-tag entries from loaded persons so the in-memory model stays usable even if the file is stale.
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
@@ -173,58 +179,67 @@ Given below is an example usage scenario and how the undo/redo mechanism behaves
 
 Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
 
-![UndoRedoState0](images/UndoRedoState0.png)
+<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
 Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
 
-![UndoRedoState1](images/UndoRedoState1.png)
+<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
 Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
-![UndoRedoState2](images/UndoRedoState2.png)
+<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+<box type="info" seamless>
 
-</div>
+**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+
+</box>
 
 Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
 
-![UndoRedoState3](images/UndoRedoState3.png)
+<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
+
+<box type="info" seamless>
+
+**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
 than attempting to perform the undo.
 
-</div>
+</box>
 
 The following sequence diagram shows how an undo operation goes through the `Logic` component:
 
-![UndoSequenceDiagram](images/UndoSequenceDiagram-Logic.png)
+<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+<box type="info" seamless>
 
-</div>
+**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+
+</box>
 
 Similarly, how an undo operation goes through the `Model` component is shown below:
 
-![UndoSequenceDiagram](images/UndoSequenceDiagram-Model.png)
+<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
 
 The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+<box type="info" seamless>
 
-</div>
+**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+
+</box>
 
 Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
 
-![UndoRedoState4](images/UndoRedoState4.png)
+<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
 
 Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
 
-![UndoRedoState5](images/UndoRedoState5.png)
+<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
 
 The following activity diagram summarizes what happens when a user executes a new command:
 
-<img src="images/CommitActivityDiagram.png" width="250" />
+<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
 
 #### Design considerations:
 
@@ -245,11 +260,11 @@ _{more aspects and alternatives to be added}_
 
 #### Implementation
 
-The sorting feature is integrated into the `list` command. It allows users to view all residents ordered by a chosen field (name, room, phone, or email).
+The sorting feature is integrated into the `list` command. It allows users to view all residents ordered by a chosen field (name or room).
 
 The implementation relies on JavaFX's `SortedList`, which is initialized in `ModelManager` to wrap around the `filteredPersons` list. This architectural choice ensures that whenever the filter changes (e.g., via `find`), the sort order can still be applied to the filtered subset.
 
-1.  `ListCommandParser` identifies the `s/` prefix and maps the field name to a corresponding `Comparator<Person>`.
+1.  `ListCommandParser` identifies the `-sort` option and maps the following field prefix (`n/`, `r/`) to a corresponding `Comparator<Person>`.
 2.  `ListCommand` is created with the field name and its comparator.
 3.  Upon execution, `ListCommand` calls `Model#updateFilteredPersonList(Predicate, Comparator)`.
 4.  `ModelManager` sets the filter on its `FilteredList` and the comparator on its `SortedList`.
@@ -259,9 +274,42 @@ The implementation relies on JavaFX's `SortedList`, which is initialized in `Mod
 
 **Aspect: How sorting interacts with filtering**
 
-*   **Choice (current):** Sort order is reset when a new filter is applied unless specified via `list s/`.
+*   **Choice (current):** Sort order is reset when a new filter is applied unless specified via `list -sort <prefix>/`.
     *   Pros: Predictable behavior; users always see the list state they explicitly requested.
     *   Cons: Users cannot "keep" a sort order while performing multiple different searches without re-specifying the sort field.
+
+### Tag management
+
+#### Implementation
+
+The tag model separates three concerns: tag identity, built-in tag definitions, and custom-tag existence.
+
+1. `Tag` remains an immutable value object that stores the displayed tag name and uses exact string equality. This makes tag behavior predictable: `study-group` and `Study-Group` are different tags.
+2. `DefaultTagEnum` defines the built-in tags (`vegetarian`, `vegan`, `halal`, `allergies`). These are treated as known immediately, but they follow the same case-sensitive matching rule as custom tags.
+3. `CustomTagRegistry` tracks which custom tags currently exist in an `AddressBook`. This keeps "does this tag exist already?" in the model layer instead of inside `Tag`.
+4. `add` and `edit` only register unknown custom tags when the user explicitly supplies `-newtag`. Without that flag, both commands reject unknown tags consistently.
+5. Shared helpers, `ParserUtil.parseBooleanFlag(...)` and `TagCommandUtil.validateKnownTags(...)`, keep `-newtag` parsing and tag validation aligned between `add` and `edit`.
+6. During loading and person updates, `AddressBook` also registers custom tags found on persons. This keeps the in-memory registry consistent even if the stored `customTags` list is incomplete.
+
+#### Design considerations
+
+**Aspect: Where tag existence should be tracked**
+
+* **Choice (current):** Store tag existence in `CustomTagRegistry`, while `Tag` only represents a value.
+  * Pros: Keeps the value object simple and reusable; avoids spreading tag-existence logic across commands and model classes.
+  * Cons: Introduces one more model concept that must stay synchronized with resident data.
+
+**Aspect: How tag casing should work**
+
+* **Choice (current):** Use exact, case-sensitive tag identity for both built-in and custom tags.
+  * Pros: Matches a branch-like mental model; avoids hidden normalization or silent rewriting of user input.
+  * Cons: Makes near-duplicate tags easier to create if users are inconsistent with capitalization.
+
+**Aspect: How to handle incomplete `customTags` data from storage**
+
+* **Choice (current):** Repair the registry in memory from loaded persons, and persist the repaired registry on the next successful save.
+  * Pros: Keeps runtime behavior correct without adding immediate load-time writeback.
+  * Cons: The JSON file can remain temporarily stale until a later successful command triggers saving.
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -294,9 +342,23 @@ Felix is a Year 3 Soc student and RA at Acacia College. Approachable and proacti
 * As an RA, I can list all residents, so that I can review the current roster at a glance.
 * As a forgetful RA, I can find residents by name keyword or exact room, so that I can retrieve a record even when I only remember partial information.
 * As an RA, I can edit a resident's core details, so that the address book stays accurate when contact information changes.
-* As an RA, I can add or clear a private remark for a resident, so that I can keep follow-up notes without changing the resident's main details.
+* As an RA, I can add or clear a private comment for a resident, so that I can keep follow-up notes without changing the resident's main details.
 * As an RA, I can delete resident records that are no longer needed, so that the address book remains organised.
 * As a new RA, I can refer to help and documentation, so that I can learn the command format quickly.
+
+
+Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
+
+| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
+|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
+| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
+| `* * *`  | user                                       | add a new person             |                                                                        |
+| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
+| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
+| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
+| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+
+*{More to be added}*
 
 ### Use cases
 
@@ -325,14 +387,14 @@ Felix is a Year 3 Soc student and RA at Acacia College. Approachable and proacti
 
       Use case resumes at step 2.
 
-**Use case: Add or clear a resident remark**
+**Use case: Add or clear a resident comment**
 
 **MSS**
 
 1. User requests to list residents or find a resident.
 2. System shows a list of residents with their indices.
-3. User requests to add a remark to a specific resident in the list.
-4. System updates the resident's remark.
+3. User requests to add a comment to a specific resident in the list.
+4. System updates the resident's comment.
 5. System shows the updated resident list.
 
    Use case ends.
@@ -349,9 +411,9 @@ Felix is a Year 3 Soc student and RA at Acacia College. Approachable and proacti
 
       Use case resumes at step 2.
 
-* 3b. The user provides `r/` with no text.
+* 3b. The user provides `c/` with no text.
 
-    * 3b1. System clears the resident's existing remark.
+    * 3b1. System clears the resident's existing comment.
 
       Use case ends.
 
@@ -479,7 +541,7 @@ Felix is a Year 3 Soc student and RA at Acacia College. Approachable and proacti
 * **Private contact detail**: A contact detail that is not meant to be shared with others
 * **Resident**: A person living in the residential college whose information is stored and managed by the system. Each resident record may include fields such as name, room number, and other optional details.
 * **Resident Assistant (RA)**: The primary user of the application who manages resident information, performs onboarding, and maintains records throughout the semester for a batch of residents living in the residential college.
-* **Remark**: A free-form note stored with a resident record for short contextual information such as follow-ups or special reminders.
+* **Comment**: A free-form note stored with a resident record for short contextual information such as follow-ups or special reminders.
 * **User's Preferences (UserPref)**: Settings related to the application environment (e.g., window size or file paths) that are saved locally and loaded when the application starts.
 * **JSON**: JSON (JavaScript Object Notation) is the data format used by the application to store resident information and user preferences on disk.
 * **Index**: The number used by commands (e.g., `delete 1`) to identify a resident from the currently displayed list.
@@ -491,10 +553,12 @@ Felix is a Year 3 Soc student and RA at Acacia College. Approachable and proacti
 
 Given below are instructions to test the app manually.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** These instructions only provide a starting point for testers to work on;
+<box type="info" seamless>
+
+**Note:** These instructions only provide a starting point for testers to work on;
 testers are expected to do more *exploratory* testing.
 
-</div>
+</box>
 
 ### Launch and shutdown
 
@@ -519,14 +583,11 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: Multiple residents with different names, rooms, and phone numbers.
    
-   1. Test case: `list s/room`<br>
-      Expected: List is updated to show all residents sorted by room number (format: #BLOCK-ROOM-LETTER). Status message confirms sorting.
+   1. Test case: `list -sort r/`<br>
+      Expected: List is updated to show all residents sorted by room number (format: #BLOCK-ROOM[-LETTER]). Status message confirms sorting.
 
-   1. Test case: `list s/phone`<br>
-      Expected: List is updated to show all residents sorted by their phone numbers.
-
-   1. Test case: `list s/invalid`<br>
-      Expected: No sorting occurs. Error message "Invalid sort field! Supported fields: name, room, phone, email" is displayed.
+   1. Test case: `list -sort x/`<br>
+      Expected: No sorting occurs. Error message "Invalid sort field! Supported field prefixes: n/, r/" is displayed.
 
 ### Deleting a person
 
@@ -545,20 +606,20 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
-### Editing a person's remark
+### Editing a person's comment
 
-1. Adding or clearing a remark while all persons are being shown
+1. Adding or clearing a comment while all persons are being shown
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `remark 1 r/Requires wheelchair-accessible venue`<br>
-      Expected: The first person's remark is updated. The success message is shown in the result display. The person card shows the new remark.
+   1. Test case: `comment 1 c/Requires wheelchair-accessible venue`<br>
+      Expected: The first person's comment is updated. The success message is shown in the result display. The person card shows the new comment.
 
-   1. Test case: `remark 1 r/`<br>
-      Expected: The first person's remark is removed. The success message is shown in the result display. The remark label is no longer shown on the person card.
+   1. Test case: `comment 1 c/`<br>
+      Expected: The first person's comment is removed. The success message is shown in the result display. The comment label is no longer shown on the person card.
 
-   1. Other incorrect remark commands to try: `remark`, `remark 1`, `remark 0 r/test`, `remark x r/test`, `remark 1 r/first r/second`<br>
-      Expected: No person's remark is changed. Error details are shown in the result display.
+   1. Other incorrect comment commands to try: `comment`, `comment 1`, `comment 0 c/test`, `comment x c/test`, `comment 1 c/first c/second`<br>
+      Expected: No person's comment is changed. Error details are shown in the result display.
 
 ### Saving data
 

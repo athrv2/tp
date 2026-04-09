@@ -1,11 +1,13 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 /**
  * The API of the Model component.
@@ -62,6 +64,12 @@ public interface Model {
     boolean hasPerson(Person person);
 
     /**
+     * Returns true if {@code candidate} conflicts with some person in the address book,
+     * excluding {@code exclude}.
+     */
+    boolean hasPersonExcept(Person candidate, Person exclude);
+
+    /**
      * Deletes the given person.
      * The person must exist in the address book.
      */
@@ -79,6 +87,16 @@ public interface Model {
      * The person identity of {@code editedPerson} must not be the same as another existing person in the address book.
      */
     void setPerson(Person target, Person editedPerson);
+
+    /**
+     * Returns true if the given tag already exists in the address book.
+     */
+    boolean hasTag(Tag tag);
+
+    /**
+     * Adds the given tags to the custom tag registry.
+     */
+    void addCustomTags(Set<Tag> tags);
 
     /**
      * Returns an unmodifiable view of the filtered person list

@@ -1,9 +1,11 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
@@ -123,5 +125,40 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parses a flag prefix that must not have an associated value.
+     * If the flag is present but followed by a non-empty value, the error uses the generic invalid command format.
+     */
+    public static boolean parseBooleanFlag(ArgumentMultimap argMultimap, Prefix prefix, String usageMessage)
+            throws ParseException {
+        requireNonNull(usageMessage);
+        return parseBooleanFlagWithTrailingValueMessage(argMultimap, prefix,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, usageMessage));
+    }
+
+    /**
+     * Parses a flag prefix that must not have an associated value.
+     *
+     * @param messageWhenFlagHasTrailingValue full message when {@code prefix} is present but followed by a non-empty
+     *        value
+     */
+    public static boolean parseBooleanFlagWithTrailingValueMessage(ArgumentMultimap argMultimap, Prefix prefix,
+            String messageWhenFlagHasTrailingValue) throws ParseException {
+        requireNonNull(argMultimap);
+        requireNonNull(prefix);
+        requireNonNull(messageWhenFlagHasTrailingValue);
+
+        Optional<String> flagValue = argMultimap.getValue(prefix);
+        if (flagValue.isEmpty()) {
+            return false;
+        }
+
+        if (!flagValue.get().isEmpty()) {
+            throw new ParseException(messageWhenFlagHasTrailingValue);
+        }
+
+        return true;
     }
 }

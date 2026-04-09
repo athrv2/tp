@@ -10,8 +10,8 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Room implements Comparable<Room> {
 
     public static final String MESSAGE_CONSTRAINTS =
-        "Room must follow the format #FLOOR-UNIT[-LETTER], where floor is 1-2 digits, "
-        + "unit is 2-3 digits, and letter is optional (e.g. #14-203-D or #14-20).";
+            "Room must follow the format #FLOOR-UNIT[-LETTER], where floor is 1-2 digits, "
+                    + "unit is 2-3 digits, and letter is optional (e.g. #14-203-D or #14-20).";
 
     /*
      * The first character of the room number must not be a whitespace,
@@ -56,6 +56,7 @@ public class Room implements Comparable<Room> {
         }
 
         Room otherRoom = (Room) other;
+        assert otherRoom != null : "After instanceof check, otherRoom should not be null";
         return value.equals(otherRoom.value);
     }
 
@@ -66,6 +67,10 @@ public class Room implements Comparable<Room> {
 
     @Override
     public int compareTo(Room other) {
+        assert other != null : "Cannot compare Room with null";
+        assert this.value.startsWith("#") : "Room value must start with #";
+        assert other.value.startsWith("#") : "Room value must start with #";
+
         // Format: #FLOOR-UNIT[-LETTER] (letter is optional)
         String[] parts1 = this.value.substring(1).split("-");
         String[] parts2 = other.value.substring(1).split("-");

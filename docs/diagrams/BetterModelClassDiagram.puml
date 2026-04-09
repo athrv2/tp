@@ -7,15 +7,23 @@ skinparam classBackgroundColor MODEL_COLOR
 AddressBook *-right-> "1" UniquePersonList
 AddressBook *-right-> "1" UniqueTagList
 UniqueTagList -[hidden]down- UniquePersonList
-UniqueTagList -[hidden]down- UniquePersonList
 
 UniqueTagList -right-> "*" Tag
 UniquePersonList -right-> Person
 
 Person -up-> "*" Tag
 
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> Address
+Person *--> "1" Name
+Person *--> "0..1" Phone
+Person *--> "0..1" Email
+Person *--> "1" Room
+Person *--> "1" Comment
+
+class TagType <<enumeration>> {
+    VEGETARIAN
+    VEGAN
+    HALAL
+    ALLERGIES
+}
+Tag *--> "1" TagType
 @enduml

@@ -10,6 +10,8 @@ import static seedu.address.testutil.TypicalPersons.ALICE;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandTest {
@@ -50,7 +53,88 @@ public class AddCommandTest {
         AddCommand addCommand = new AddCommand(validPerson);
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_NAME, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_duplicatePhone_throwsCommandException() {
+        Person existingPerson = new PersonBuilder().withName("Alice Alpha")
+                .withPhone("90000001")
+                .withEmail("alice.alpha@example.com")
+                .withRoom("#1-101-A")
+                .build();
+        Person duplicatePhone = new PersonBuilder().withName("Ben Beta")
+                .withPhone("90000001")
+                .withEmail("ben.beta@example.com")
+                .withRoom("#2-202-B")
+                .build();
+        AddCommand addCommand = new AddCommand(duplicatePhone);
+
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PHONE, () ->
+                addCommand.execute(new ModelStubWithPerson(existingPerson)));
+    }
+
+    @Test
+    public void execute_duplicateEmail_throwsCommandException() {
+        Person existingPerson = new PersonBuilder().withName("Cara Gamma")
+                .withPhone("90000002")
+                .withEmail("cara.gamma@example.com")
+                .withRoom("#3-303-C")
+                .build();
+        Person duplicateEmail = new PersonBuilder().withName("Dan Delta")
+                .withPhone("90000003")
+                .withEmail("cara.gamma@example.com")
+                .withRoom("#4-404-D")
+                .build();
+        AddCommand addCommand = new AddCommand(duplicateEmail);
+
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_EMAIL, () ->
+                addCommand.execute(new ModelStubWithPerson(existingPerson)));
+    }
+
+    @Test
+    public void execute_duplicateRoom_throwsCommandException() {
+        Person existingPerson = new PersonBuilder().withName("Eve Epsilon")
+                .withPhone("90000004")
+                .withEmail("eve.epsilon@example.com")
+                .withRoom("#5-505-E")
+                .build();
+        Person duplicateRoom = new PersonBuilder().withName("Fox Zeta")
+                .withPhone("90000005")
+                .withEmail("fox.zeta@example.com")
+                .withRoom("#5-505-E")
+                .build();
+        AddCommand addCommand = new AddCommand(duplicateRoom);
+
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_ROOM, () ->
+                addCommand.execute(new ModelStubWithPerson(existingPerson)));
+    }
+
+    @Test
+    public void execute_unknownCustomTagWithoutNewTagFlag_throwsCommandException() {
+        Person personWithCustomTag = new PersonBuilder().withTags("study-group").build();
+        AddCommand addCommand = new AddCommand(personWithCustomTag);
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+
+        assertThrows(CommandException.class,
+                String.format(
+                        AddCommand.MESSAGE_UNKNOWN_TAGS,
+                        "study-group",
+                        "-newtag",
+                        AddCommand.MESSAGE_USAGE_WITH_NEWTAG), () -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_newCustomTagWithNewTagFlag_addSuccessful() throws Exception {
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+        Person validPerson = new PersonBuilder().withTags("study-group").build();
+
+        CommandResult commandResult = new AddCommand(validPerson, true).execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validPerson)),
+                commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList(validPerson), modelStub.personsAdded);
+        assertTrue(modelStub.customTagsAdded.contains(new Tag("study-group")));
     }
 
     @Test
@@ -80,7 +164,8 @@ public class AddCommandTest {
     @Test
     public void toStringMethod() {
         AddCommand addCommand = new AddCommand(ALICE);
-        String expected = AddCommand.class.getCanonicalName() + "{toAdd=" + ALICE + "}";
+        String expected = AddCommand.class.getCanonicalName() + "{toAdd=" + ALICE
+                + ", shouldCreateNewTags=false}";
         assertEquals(expected, addCommand.toString());
     }
 
@@ -139,12 +224,27 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasPersonExcept(Person candidate, Person exclude) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void deletePerson(Person target) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
         public void setPerson(Person target, Person editedPerson) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasTag(Tag tag) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addCustomTags(Set<Tag> tags) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -180,6 +280,13 @@ public class AddCommandTest {
             requireNonNull(person);
             return this.person.isSamePerson(person);
         }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            AddressBook addressBook = new AddressBook();
+            addressBook.addPerson(person);
+            return addressBook;
+        }
     }
 
     /**
@@ -187,6 +294,7 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
+        final Set<Tag> customTagsAdded = new HashSet<>();
 
         @Override
         public boolean hasPerson(Person person) {
@@ -195,9 +303,21 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasTag(Tag tag) {
+            requireNonNull(tag);
+            return tag.isBuiltInTag() || customTagsAdded.contains(tag);
+        }
+
+        @Override
         public void addPerson(Person person) {
             requireNonNull(person);
             personsAdded.add(person);
+        }
+
+        @Override
+        public void addCustomTags(Set<Tag> tags) {
+            requireNonNull(tags);
+            customTagsAdded.addAll(tags);
         }
 
         @Override

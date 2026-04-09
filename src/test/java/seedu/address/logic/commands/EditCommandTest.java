@@ -7,7 +7,8 @@ import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_ALLERGIES;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDY_GROUP;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
@@ -56,10 +57,10 @@ public class EditCommandTest {
 
         PersonBuilder personInList = new PersonBuilder(lastPerson);
         Person editedPerson = personInList.withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
-                .withTags(VALID_TAG_HUSBAND).build();
+                .withTags(VALID_TAG_ALLERGIES).build();
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withPhone(VALID_PHONE_BOB).withTags(VALID_TAG_HUSBAND).build();
+                .withPhone(VALID_PHONE_BOB).withTags(VALID_TAG_ALLERGIES).build();
         EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
@@ -105,7 +106,7 @@ public class EditCommandTest {
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(firstPerson).build();
         EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
 
-        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_NAME);
     }
 
     @Test
@@ -117,7 +118,80 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
                 new EditPersonDescriptorBuilder(personInList).build());
 
-        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_NAME);
+    }
+
+    @Test
+    public void execute_duplicatePhoneUnfilteredList_failure() {
+        Model customModel = new ModelManager(new AddressBook(), new UserPrefs());
+        Person firstPerson = new PersonBuilder().withName("Alpha").withPhone("90000011")
+                .withEmail("alpha@example.com").withRoom("#1-111-A").build();
+        Person secondPerson = new PersonBuilder().withName("Bravo").withPhone("90000022")
+                .withEmail("bravo@example.com").withRoom("#2-222-B").build();
+        customModel.addPerson(firstPerson);
+        customModel.addPerson(secondPerson);
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
+                new EditPersonDescriptorBuilder().withPhone("90000022").build());
+
+        assertCommandFailure(editCommand, customModel, EditCommand.MESSAGE_DUPLICATE_PHONE);
+    }
+
+    @Test
+    public void execute_duplicateEmailUnfilteredList_failure() {
+        Model customModel = new ModelManager(new AddressBook(), new UserPrefs());
+        Person firstPerson = new PersonBuilder().withName("Charlie").withPhone("90000033")
+                .withEmail("charlie@example.com").withRoom("#3-333-C").build();
+        Person secondPerson = new PersonBuilder().withName("Delta").withPhone("90000044")
+                .withEmail("delta@example.com").withRoom("#4-444-D").build();
+        customModel.addPerson(firstPerson);
+        customModel.addPerson(secondPerson);
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
+                new EditPersonDescriptorBuilder().withEmail("delta@example.com").build());
+
+        assertCommandFailure(editCommand, customModel, EditCommand.MESSAGE_DUPLICATE_EMAIL);
+    }
+
+    @Test
+    public void execute_duplicateRoomUnfilteredList_failure() {
+        Model customModel = new ModelManager(new AddressBook(), new UserPrefs());
+        Person firstPerson = new PersonBuilder().withName("Echo").withPhone("90000055")
+                .withEmail("echo@example.com").withRoom("#5-555-E").build();
+        Person secondPerson = new PersonBuilder().withName("Foxtrot").withPhone("90000066")
+                .withEmail("foxtrot@example.com").withRoom("#6-666-F").build();
+        customModel.addPerson(firstPerson);
+        customModel.addPerson(secondPerson);
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
+                new EditPersonDescriptorBuilder().withRoom("#6-666-F").build());
+
+        assertCommandFailure(editCommand, customModel, EditCommand.MESSAGE_DUPLICATE_ROOM);
+    }
+
+    @Test
+    public void execute_unknownCustomTagWithoutNewTagFlag_failure() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags(VALID_TAG_STUDY_GROUP).build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model,
+                String.format(EditCommand.MESSAGE_UNKNOWN_TAGS,
+                        VALID_TAG_STUDY_GROUP, "-newtag", EditCommand.MESSAGE_USAGE_WITH_NEWTAG));
+    }
+
+    @Test
+    public void execute_newCustomTagWithNewTagFlag_success() {
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person editedPerson = new PersonBuilder(personToEdit).withTags(VALID_TAG_STUDY_GROUP).build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags(VALID_TAG_STUDY_GROUP).build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor, true);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
@@ -177,7 +251,7 @@ public class EditCommandTest {
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
         EditCommand editCommand = new EditCommand(index, editPersonDescriptor);
         String expected = EditCommand.class.getCanonicalName() + "{index=" + index + ", editPersonDescriptor="
-                + editPersonDescriptor + "}";
+                + editPersonDescriptor + ", shouldCreateNewTags=false}";
         assertEquals(expected, editCommand.toString());
     }
 

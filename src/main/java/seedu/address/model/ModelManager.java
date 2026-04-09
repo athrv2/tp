@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -13,6 +14,7 @@ import javafx.collections.transformation.SortedList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -43,7 +45,7 @@ public class ModelManager implements Model {
         this(new AddressBook(), new UserPrefs());
     }
 
-    //=========== UserPrefs ==================================================================================
+    // =========== UserPrefs ==================================================================================
 
     @Override
     public ReadOnlyUserPrefs getUserPrefs() {
@@ -78,7 +80,7 @@ public class ModelManager implements Model {
         userPrefs.setAddressBookFilePath(addressBookFilePath);
     }
 
-    //=========== AddressBook ================================================================================
+    // =========== AddressBook ================================================================================
 
     @Override
     public ReadOnlyAddressBook getAddressBook() {
@@ -97,14 +99,23 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public boolean hasPersonExcept(Person candidate, Person exclude) {
+        requireNonNull(candidate);
+        requireNonNull(exclude);
+        return addressBook.hasPersonExcept(candidate, exclude);
+    }
+
+    @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
+        assert !addressBook.hasPerson(target) : "Person should not exist after deletePerson";
     }
 
     @Override
     public void addPerson(Person person) {
         addressBook.addPerson(person);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        assert addressBook.hasPerson(person) : "Person should exist after addPerson";
     }
 
     @Override
@@ -114,7 +125,19 @@ public class ModelManager implements Model {
         addressBook.setPerson(target, editedPerson);
     }
 
-    //=========== Filtered Person List Accessors =============================================================
+    @Override
+    public boolean hasTag(Tag tag) {
+        requireNonNull(tag);
+        return addressBook.hasTag(tag);
+    }
+
+    @Override
+    public void addCustomTags(Set<Tag> tags) {
+        requireNonNull(tags);
+        addressBook.addCustomTags(tags);
+    }
+
+    // =========== Filtered Person List Accessors =============================================================
 
     /**
      * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
