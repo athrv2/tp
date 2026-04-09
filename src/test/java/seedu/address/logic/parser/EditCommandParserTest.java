@@ -26,7 +26,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_ALLERGIES;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HALAL;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDY_GROUP;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NEWTAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROOM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -205,7 +204,8 @@ public class EditCommandParserTest {
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ROOM));
 
         userInput = targetIndex.getOneBased() + TAG_DESC_STUDY_GROUP + NEWTAG_FLAG + NEWTAG_FLAG;
-        assertParseFailure(parser, userInput, Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NEWTAG));
+        assertParseSuccess(parser, userInput, new EditCommand(INDEX_FIRST_PERSON,
+                new EditPersonDescriptorBuilder().withTags("study-group").build(), true));
     }
 
     @Test

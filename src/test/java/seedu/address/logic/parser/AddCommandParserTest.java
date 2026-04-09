@@ -29,7 +29,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HALAL;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDY_GROUP;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NEWTAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROOM;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
@@ -234,8 +233,14 @@ public class AddCommandParserTest {
         assertParseFailure(parser, NAME_DESC_BOB + ROOM_DESC_BOB + NEWTAG_FLAG + " unexpected",
                 AddCommand.MESSAGE_NEWTAG_FLAG_TAKES_NO_VALUE);
 
-        // duplicate newtag flag
-        assertParseFailure(parser, NAME_DESC_BOB + ROOM_DESC_BOB + TAG_DESC_STUDY_GROUP + NEWTAG_FLAG + NEWTAG_FLAG,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NEWTAG));
+        // duplicate newtag flag - valid and should be treated as a single flag
+        assertParseSuccess(parser, NAME_DESC_BOB + ROOM_DESC_BOB + TAG_DESC_STUDY_GROUP + NEWTAG_FLAG + NEWTAG_FLAG,
+                new AddCommand(new PersonBuilder().withName(VALID_NAME_BOB).withRoom(VALID_ROOM_BOB)
+                        .withTags(VALID_TAG_STUDY_GROUP).withPhone("").withEmail("").build(), true));
+
+        // multiple duplicate newtag flags followed by text - invalid
+        assertParseFailure(parser,
+                NAME_DESC_BOB + ROOM_DESC_BOB + NEWTAG_FLAG + NEWTAG_FLAG + NEWTAG_FLAG + " randomtext",
+                AddCommand.MESSAGE_NEWTAG_FLAG_TAKES_NO_VALUE);
     }
 }
