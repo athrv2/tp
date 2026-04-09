@@ -74,6 +74,9 @@
 * Some options are standalone flags which do not take a value.<br>
   e.g. `-newtag` should be entered by itself, not as `-newtag yes`.
 
+* If a flag is specified multiple times, it will be treated as a single flag.<br>
+  e.g. `-newtag -newtag` is treated the same as `-newtag`.
+
 * For commands that accept multiple values in one parameter, use comma-separated input.<br>
   e.g. `delete 1,3,5` deletes residents at indices 1, 3, and 5.
 

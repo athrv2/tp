@@ -48,7 +48,7 @@ public class AddCommandParser implements Parser<AddCommand> {
             throw new ParseException(AddCommand.MESSAGE_MISSING_ROOM);
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ROOM, PREFIX_NEWTAG);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ROOM);
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Phone phone = argMultimap.getValue(PREFIX_PHONE).isPresent()
                 ? ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get())
