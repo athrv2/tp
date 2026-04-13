@@ -129,20 +129,25 @@
     -fx-border-width: 1;
 }
 
-.list-cell .label {
+.cell_big_label, .cell_heading_label {
+    -fx-font-size: 16px;
+}
+
+.cell_heading_label {
+    -fx-font-weight: bold;
     -fx-text-fill: #0f172a;
 }
 
-.cell_big_label {
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-font-size: 16px;
-    -fx-text-fill: #e2e8f0; /* #010504; */
+.cell_small_label, .field_header_label, .comment_label {
+    -fx-font-size: 13px;
 }
 
-.cell_small_label {
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 13px;
-    -fx-text-fill:#e2e8f0; /* #010504; */
+.field_header_label {
+    -fx-text-fill: #0f172a;
+}
+
+.comment_label {
+    -fx-text-fill: #333355;
 }
 
 .stack-pane {
